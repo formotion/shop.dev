@@ -5,7 +5,6 @@ namespace frontend\services\auth;
 
 use frontend\forms\PasswordResetRequestForm;
 use frontend\forms\ResetPasswordForm;
-use SebastianBergmann\GlobalState\RuntimeException;
 use Yii;
 use common\entities\User;
 
@@ -27,7 +26,7 @@ class PasswordResetService
 
         $user->requestPasswordReset();
         if (!$user->save()){
-            throw new  RuntimeException('Saving error.');
+            throw new  \RuntimeException('Saving error.');
         }
 
 
