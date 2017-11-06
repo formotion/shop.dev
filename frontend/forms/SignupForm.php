@@ -2,7 +2,6 @@
 namespace frontend\forms;
 
 use yii\base\Model;
-use common\entities\User;
 
 /**
  * Signup form
@@ -36,19 +35,4 @@ class SignupForm extends Model
         ];
     }
 
-    /**
-     * Signs user up.
-     *
-     * @return User|null the saved model or null if saving fails
-     */
-    public function signup()
-    {
-        if (!$this->validate()) {
-            return null;
-        }
-        
-        $user = User::signup($this->username,$this->email,$this->password);
-              
-        return $user->save() ? $user : null;
-    }
 }

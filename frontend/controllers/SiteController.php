@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use frontend\sevices\auth\SignupService;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
@@ -12,6 +13,8 @@ use frontend\forms\PasswordResetRequestForm;
 use frontend\forms\ResetPasswordForm;
 use frontend\forms\SignupForm;
 use frontend\forms\ContactForm;
+
+
 
 /**
  * Site controller
@@ -149,11 +152,10 @@ class SiteController extends Controller
     public function actionSignup()
     {
         $form = new SignupForm();
-        if ($form->load(Yii::$app->request->post())) {
-            if ($user = $form->signup()) {
-                if (Yii::$app->getUser()->login($user)) {
-                    return $this->goHome();
-                }
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+            $user = (new SignupService()) -> signup($form);
+            if(Yii::$app->getUser()->login($user)){
+                return $this->goHome();
             }
         }
 
