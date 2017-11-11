@@ -7,15 +7,16 @@ use frontend\forms\PasswordResetRequestForm;
 use frontend\forms\ResetPasswordForm;
 use Yii;
 use common\entities\User;
+use yii\mail\MailerInterface;
 
 
 class PasswordResetService
 {
+    private $mailer;
 
-    public function __construct()
+    public function __construct(MailerInterface $mailer)
     {
-
-
+        $this->mailer=$mailer;
     }
 
     public  function  request(PasswordResetRequestForm $form): void
@@ -37,7 +38,7 @@ class PasswordResetService
 
 
 
-        $sent=Yii::$app
+        $sent=$this
             ->mailer
             ->compose(
                 ['html' => 'passwordResetToken-html', 'text' => 'passwordResetToken-text'],
