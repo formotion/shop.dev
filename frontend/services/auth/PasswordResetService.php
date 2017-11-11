@@ -12,6 +12,12 @@ use common\entities\User;
 class PasswordResetService
 {
 
+    public function __construct()
+    {
+
+
+    }
+
     public  function  request(PasswordResetRequestForm $form): void
     {
         /* @var $user User */
@@ -37,13 +43,12 @@ class PasswordResetService
                 ['html' => 'passwordResetToken-html', 'text' => 'passwordResetToken-text'],
                 ['user' => $user]
             )
-            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
             ->setTo($form->email)
             ->setSubject('Password reset for ' . Yii::$app->name)
             ->send();
 
         if (!$sent){
-            throw  new  RuntimeException('Sending error.');
+            throw  new  \RuntimeException('Sending error.');
         }
     }
 
