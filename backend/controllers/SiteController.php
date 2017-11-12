@@ -1,17 +1,21 @@
 <?php
 namespace backend\controllers;
-
+use common\services\AuthService;
 use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
 use common\forms\LoginForm;
-
 /**
  * Site controller
  */
 class SiteController extends Controller
 {
+    private $authService;
+    public function __construct($id, $module, AuthService $authService, $config = [])
+    {
+        parent::__construct($id, $module, $config);
+        $this->authService = $authService;
+    }
     /**
      * @inheritdoc
      */
@@ -26,7 +30,6 @@ class SiteController extends Controller
             ],
         ];
     }
-
     /**
      * @inheritdoc
      */
@@ -38,7 +41,6 @@ class SiteController extends Controller
             ],
         ];
     }
-
     /**
      * Displays homepage.
      *
@@ -48,7 +50,6 @@ class SiteController extends Controller
     {
         return $this->render('index');
     }
-
     /**
      * Login action.
      *
@@ -59,18 +60,21 @@ class SiteController extends Controller
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-        
         $this->layout = 'main-login';
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        } else {
-            return $this->render('login', [
-                'model' => $model,
-            ]);
+        $form = new LoginForm();
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+            try {
+                $user = $this->authService->auth($form);
+                Yii::$app->user->login($user, $form->rememberMe ? 3600 * 24 * 30 : 0);
+                return $this->goBack();
+            } catch (\DomainException $e) {
+                Yii::$app->session->setFlash('error', $e->getMessage());
+            }
         }
+        return $this->render('login', [
+            'model' => $form,
+        ]);
     }
-
     /**
      * Logout action.
      *
@@ -79,7 +83,6 @@ class SiteController extends Controller
     public function actionLogout()
     {
         Yii::$app->user->logout();
-
         return $this->goHome();
     }
 }
