@@ -1,6 +1,6 @@
 <?php
 
-namespace ahop\forms;
+namespace shop\forms\auth;
 
 use yii\base\Model;
 

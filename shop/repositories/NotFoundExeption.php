@@ -1,10 +1,5 @@
 <?php
-
-namespace common\repositories;
-
-
-
+namespace shop\repositories;
 class NotFoundException extends \DomainException
 {
-
 }

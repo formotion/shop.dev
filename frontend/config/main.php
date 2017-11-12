@@ -5,11 +5,13 @@ $params = array_merge(
     require(__DIR__ . '/params.php'),
     require(__DIR__ . '/params-local.php')
 );
-
 return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => [
+        'log',
+        'common\bootstrap\SetUp',
+    ],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
         'request' => [
@@ -17,12 +19,11 @@ return [
             'cookieValidationKey' => $params['cookieValidationKey'],
         ],
         'user' => [
-            'identityClass' => 'common\models\User',
+            'identityClass' => 'shop\entities\User',
             'enableAutoLogin' => true,
-            'identityCookie' => ['name' => '_identity', 'httpOnly' => true,'domain' => $params['cookieDomain'],],
+            'identityCookie' => ['name' => '_identity', 'httpOnly' => true, 'domain' => $params['cookieDomain']],
         ],
         'session' => [
-            // this is the name of the session cookie used for login on the frontend
             'name' => '_session',
             'cookieParams' => [
                 'domain' => $params['cookieDomain'],
@@ -41,13 +42,11 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        
-        'backendUrlManager' => require __DIR__ . '/../../backend/config/urlManager.php',   
+        'backendUrlManager' => require __DIR__ . '/../../backend/config/urlManager.php',
         'frontendUrlManager' => require __DIR__ . '/urlManager.php',
         'urlManager' => function () {
             return Yii::$app->get('frontendUrlManager');
         },
-        
     ],
     'params' => $params,
 ];
