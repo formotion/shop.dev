@@ -27,7 +27,7 @@ class PasswordResetService
         $this->users->save($user);
         $sent = $this->mailer
             ->compose(
-                ['html' => 'auth/reset/confirm-html', 'text' => 'auth/reset/confirm-text'],
+                ['html' => 'site/reset/confirm-html', 'text' => 'site/reset/confirm-text'],
                 ['user' => $user]
             )
             ->setTo($user->email)

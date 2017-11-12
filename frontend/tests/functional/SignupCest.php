@@ -6,7 +6,7 @@ class SignupCest
     protected $formId = '#form-signup';
     public function _before(FunctionalTester $I)
     {
-        $I->amOnRoute('auth/signup/request');
+        $I->amOnRoute('site/signup/request');
     }
     public function signupWithEmptyFields(FunctionalTester $I)
     {

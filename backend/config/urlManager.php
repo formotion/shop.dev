@@ -6,8 +6,8 @@ return [
     'enablePrettyUrl' => true,
     'showScriptName' => false,
     'rules' => [
-        '' => 'auth/index',
-        '<_a:login|logout>' => 'auth/<_a>',
+        /*'' => 'site/index',*/
+        '<_a:login|logout>' => 'site/<_a>',
         '<_c:[\w\-]+>' => '<_c>/index',
         '<_c:[\w\-]+>/<id:\d+>' => '<_c>/view',
         '<_c:[\w\-]+>/<_a:[\w-]+>' => '<_c>/<_a>',

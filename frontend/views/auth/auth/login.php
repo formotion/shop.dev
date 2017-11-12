@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= $form->field($model, 'rememberMe')->checkbox() ?>
 
             <div style="color:#999;margin:1em 0">
-                If you forgot your password you can <?= Html::a('reset it', ['auth/reset/request']) ?>.
+                If you forgot your password you can <?= Html::a('reset it', ['site/reset/request']) ?>.
             </div>
 
             <div class="form-group">
@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <h2>Socials</h2>
             <?= yii\authclient\widgets\AuthChoice::widget([
-                'baseAuthUrl' => ['auth/network/auth']
+                'baseAuthUrl' => ['site/network/site']
             ]); ?>
         </div>
     </div>

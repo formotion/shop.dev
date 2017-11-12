@@ -23,7 +23,7 @@ class SignupService
         $this->users->save($user);
         $sent = $this->mailer
             ->compose(
-                ['html' => 'auth/signup/confirm-html', 'text' => 'auth/signup/confirm-text'],
+                ['html' => 'site/signup/confirm-html', 'text' => 'site/signup/confirm-text'],
                 ['user' => $user]
             )
             ->setTo($form->email)

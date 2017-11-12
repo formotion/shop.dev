@@ -27,7 +27,7 @@ return [
                 'httpOnly' => true,
                 'domain' => $params['cookieDomain'],
             ],
-            'loginUrl' => ['auth/login'],
+            'loginUrl' => ['site/login'],
         ],
         'session' => [
             'name' => '_session',
@@ -56,7 +56,7 @@ return [
     ],
     'as access' => [
         'class' => 'yii\filters\AccessControl',
-        'except' => ['auth/login', 'site/error'],
+        'except' => ['site/login', 'site/error'],
         'rules' => [
             [
                 'allow' => true,
