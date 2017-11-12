@@ -20,7 +20,7 @@ return [
             'cookieValidationKey' => $params['cookieValidationKey'],
         ],
         'user' => [
-            'identityClass' => 'shop\entities\User',
+            'identityClass' => 'shop\entities\User\User',
             'enableAutoLogin' => true,
             'identityCookie' => [
                 'name' => '_identity',
@@ -46,7 +46,7 @@ return [
             ],
         ],
         'errorHandler' => [
-            'errorAction' => 'auth/error',
+            'errorAction' => 'site/error',
         ],
         'backendUrlManager' => require __DIR__ . '/urlManager.php',
         'frontendUrlManager' => require __DIR__ . '/../../frontend/config/urlManager.php',
@@ -56,7 +56,7 @@ return [
     ],
     'as access' => [
         'class' => 'yii\filters\AccessControl',
-        'except' => ['auth/login', 'auth/error'],
+        'except' => ['auth/login', 'site/error'],
         'rules' => [
             [
                 'allow' => true,

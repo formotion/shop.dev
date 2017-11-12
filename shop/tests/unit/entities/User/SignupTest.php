@@ -1,14 +1,14 @@
 <?php
 namespace shop\tests\unit\entities\User;
 use Codeception\Test\Unit;
-use shop\entities\User;
+use shop\entities\User\User;
 class SignupTest extends Unit
 {
     public function testSuccess()
     {
         $user = User::requestSignup(
             $username = 'username',
-            $email = 'email@auth.com',
+            $email = 'email@site.com',
             $password = 'password'
         );
         $this->assertEquals($username, $user->username);
