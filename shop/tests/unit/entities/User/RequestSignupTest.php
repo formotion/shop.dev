@@ -8,7 +8,7 @@ class RequestSignupTest extends Unit
     {
         $user = User::requestSignup(
             $username = 'username',
-            $email = 'email@site.com',
+            $email = 'email@auth.com',
             $password = 'password'
         );
         $this->assertEquals($username, $user->username);

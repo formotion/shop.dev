@@ -27,6 +27,7 @@ return [
                 'httpOnly' => true,
                 'domain' => $params['cookieDomain'],
             ],
+            'loginUrl' => ['auth/login'],
         ],
         'session' => [
             'name' => '_session',
@@ -45,7 +46,7 @@ return [
             ],
         ],
         'errorHandler' => [
-            'errorAction' => 'site/error',
+            'errorAction' => 'auth/error',
         ],
         'backendUrlManager' => require __DIR__ . '/urlManager.php',
         'frontendUrlManager' => require __DIR__ . '/../../frontend/config/urlManager.php',
@@ -55,7 +56,7 @@ return [
     ],
     'as access' => [
         'class' => 'yii\filters\AccessControl',
-        'except' => ['site/login', 'site/error'],
+        'except' => ['auth/login', 'auth/error'],
         'rules' => [
             [
                 'allow' => true,
