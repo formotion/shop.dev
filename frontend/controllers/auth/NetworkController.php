@@ -17,7 +17,7 @@ class NetworkController extends Controller
     public function actions()
     {
         return [
-            'site' => [
+            'auth' => [
                 'class' => AuthAction::class,
                 'successCallback' => [$this, 'onAuthSuccess'],
             ],
