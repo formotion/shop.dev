@@ -1,7 +1,7 @@
 <?php
 namespace shop\services;
 use shop\forms\manage\Shop\Product\ReviewEditForm;
-use shop\repositories\ProductRepository;
+use shop\repositories\Shop\ProductRepository;
 class ReviewManageService
 {
     private $products;
