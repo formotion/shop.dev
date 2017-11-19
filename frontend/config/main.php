@@ -5,12 +5,17 @@ $params = array_merge(
     require(__DIR__ . '/params.php'),
     require(__DIR__ . '/params-local.php')
 );
+
 return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
     'bootstrap' => [
         'log',
         'common\bootstrap\SetUp',
+    ],
+    'aliases' => [
+        '@staticRoot' => $params['staticPath'],
+        '@static'   => $params['staticHostInfo'],
     ],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
