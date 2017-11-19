@@ -1,5 +1,7 @@
 <?php
+
 namespace shop\entities\Shop\Product;
+
 use lhs\Yii2SaveRelationsBehavior\SaveRelationsBehavior;
 use shop\entities\behaviors\MetaBehavior;
 use shop\entities\Meta;
@@ -8,11 +10,13 @@ use shop\entities\Shop\Category;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\web\UploadedFile;
+
 /**
  * @property integer $id
  * @property integer $created_at
  * @property string $code
  * @property string $name
+ * @property string $description
  * @property integer $category_id
  * @property integer $brand_id
  * @property integer $price_old
@@ -34,33 +38,40 @@ use yii\web\UploadedFile;
 class Product extends ActiveRecord
 {
     public $meta;
-    public static function create($brandId, $categoryId, $code, $name, Meta $meta): self
+
+    public static function create($brandId, $categoryId, $code, $name, $description, Meta $meta): self
     {
         $product = new static();
         $product->brand_id = $brandId;
         $product->category_id = $categoryId;
         $product->code = $code;
         $product->name = $name;
+        $product->description = $description;
         $product->meta = $meta;
         $product->created_at = time();
         return $product;
     }
+
     public function setPrice($new, $old): void
     {
         $this->price_new = $new;
         $this->price_old = $old;
     }
-    public function edit($brandId, $code, $name, Meta $meta): void
+
+    public function edit($brandId, $code, $name, $description, Meta $meta): void
     {
         $this->brand_id = $brandId;
         $this->code = $code;
         $this->name = $name;
+        $this->description = $description;
         $this->meta = $meta;
     }
+
     public function changeMainCategory($categoryId): void
     {
         $this->category_id = $categoryId;
     }
+
     public function setValue($id, $value): void
     {
         $values = $this->values;
@@ -74,6 +85,7 @@ class Product extends ActiveRecord
         $values[] = Value::create($id, $value);
         $this->values = $values;
     }
+
     public function getValue($id): Value
     {
         $values = $this->values;
@@ -84,7 +96,9 @@ class Product extends ActiveRecord
         }
         return Value::blank($id);
     }
+
     // Modification
+
     public function getModification($id): Modification
     {
         foreach ($this->modifications as $modification) {
@@ -94,6 +108,7 @@ class Product extends ActiveRecord
         }
         throw new \DomainException('Modification is not found.');
     }
+
     public function addModification($code, $name, $price): void
     {
         $modifications = $this->modifications;
@@ -105,6 +120,7 @@ class Product extends ActiveRecord
         $modifications[] = Modification::create($code, $name, $price);
         $this->modifications = $modifications;
     }
+
     public function editModification($id, $code, $name, $price): void
     {
         $modifications = $this->modifications;
@@ -117,6 +133,7 @@ class Product extends ActiveRecord
         }
         throw new \DomainException('Modification is not found.');
     }
+
     public function removeModification($id): void
     {
         $modifications = $this->modifications;
@@ -129,7 +146,9 @@ class Product extends ActiveRecord
         }
         throw new \DomainException('Modification is not found.');
     }
+
     // Categories
+
     public function assignCategory($id): void
     {
         $assignments = $this->categoryAssignments;
@@ -141,6 +160,7 @@ class Product extends ActiveRecord
         $assignments[] = CategoryAssignment::create($id);
         $this->categoryAssignments = $assignments;
     }
+
     public function revokeCategory($id): void
     {
         $assignments = $this->categoryAssignments;
@@ -153,11 +173,14 @@ class Product extends ActiveRecord
         }
         throw new \DomainException('Assignment is not found.');
     }
+
     public function revokeCategories(): void
     {
         $this->categoryAssignments = [];
     }
+
     // Tags
+
     public function assignTag($id): void
     {
         $assignments = $this->tagAssignments;
@@ -169,6 +192,7 @@ class Product extends ActiveRecord
         $assignments[] = TagAssignment::create($id);
         $this->tagAssignments = $assignments;
     }
+
     public function revokeTag($id): void
     {
         $assignments = $this->tagAssignments;
@@ -181,17 +205,21 @@ class Product extends ActiveRecord
         }
         throw new \DomainException('Assignment is not found.');
     }
+
     public function revokeTags(): void
     {
         $this->tagAssignments = [];
     }
+
     // Photos
+
     public function addPhoto(UploadedFile $file): void
     {
         $photos = $this->photos;
         $photos[] = Photo::create($file);
         $this->updatePhotos($photos);
     }
+
     public function removePhoto($id): void
     {
         $photos = $this->photos;
@@ -204,10 +232,12 @@ class Product extends ActiveRecord
         }
         throw new \DomainException('Photo is not found.');
     }
+
     public function removePhotos(): void
     {
         $this->updatePhotos([]);
     }
+
     public function movePhotoUp($id): void
     {
         $photos = $this->photos;
@@ -223,6 +253,7 @@ class Product extends ActiveRecord
         }
         throw new \DomainException('Photo is not found.');
     }
+
     public function movePhotoDown($id): void
     {
         $photos = $this->photos;
@@ -238,6 +269,7 @@ class Product extends ActiveRecord
         }
         throw new \DomainException('Photo is not found.');
     }
+
     private function updatePhotos(array $photos): void
     {
         foreach ($photos as $i => $photo) {
@@ -246,7 +278,9 @@ class Product extends ActiveRecord
         $this->photos = $photos;
         $this->populateRelation('mainPhoto', reset($photos));
     }
+
     // Related products
+
     public function assignRelatedProduct($id): void
     {
         $assignments = $this->relatedAssignments;
@@ -258,6 +292,7 @@ class Product extends ActiveRecord
         $assignments[] = RelatedAssignment::create($id);
         $this->relatedAssignments = $assignments;
     }
+
     public function revokeRelatedProduct($id): void
     {
         $assignments = $this->relatedAssignments;
@@ -270,31 +305,37 @@ class Product extends ActiveRecord
         }
         throw new \DomainException('Assignment is not found.');
     }
+
     // Reviews
+
     public function addReview($userId, $vote, $text): void
     {
         $reviews = $this->reviews;
         $reviews[] = Review::create($userId, $vote, $text);
         $this->updateReviews($reviews);
     }
+
     public function editReview($id, $vote, $text): void
     {
         $this->doWithReview($id, function (Review $review) use ($vote, $text) {
             $review->edit($vote, $text);
         });
     }
+
     public function activateReview($id): void
     {
         $this->doWithReview($id, function (Review $review) {
             $review->activate();
         });
     }
+
     public function draftReview($id): void
     {
         $this->doWithReview($id, function (Review $review) {
             $review->draft();
         });
     }
+
     private function doWithReview($id, callable $callback): void
     {
         $reviews = $this->reviews;
@@ -307,6 +348,7 @@ class Product extends ActiveRecord
         }
         throw new \DomainException('Review is not found.');
     }
+
     public function removeReview($id): void
     {
         $reviews = $this->reviews;
@@ -319,65 +361,82 @@ class Product extends ActiveRecord
         }
         throw new \DomainException('Review is not found.');
     }
+
     private function updateReviews(array $reviews): void
     {
         $amount = 0;
         $total = 0;
+
         foreach ($reviews as $review) {
             if ($review->isActive()) {
                 $amount++;
                 $total += $review->getRating();
             }
         }
+
         $this->reviews = $reviews;
         $this->rating = $amount ? $total / $amount : null;
     }
+
     ##########################
+
     public function getBrand(): ActiveQuery
     {
         return $this->hasOne(Brand::class, ['id' => 'brand_id']);
     }
+
     public function getCategory(): ActiveQuery
     {
         return $this->hasOne(Category::class, ['id' => 'category_id']);
     }
+
     public function getCategoryAssignments(): ActiveQuery
     {
         return $this->hasMany(CategoryAssignment::class, ['product_id' => 'id']);
     }
+
     public function getTagAssignments(): ActiveQuery
     {
         return $this->hasMany(TagAssignment::class, ['product_id' => 'id']);
     }
+
     public function getModifications(): ActiveQuery
     {
         return $this->hasMany(Modification::class, ['product_id' => 'id']);
     }
+
     public function getValues(): ActiveQuery
     {
         return $this->hasMany(Value::class, ['product_id' => 'id']);
     }
+
     public function getPhotos(): ActiveQuery
     {
         return $this->hasMany(Photo::class, ['product_id' => 'id'])->orderBy('sort');
     }
+
     public function getMainPhoto(): ActiveQuery
     {
         return $this->hasOne(Photo::class, ['id' => 'main_photo_id']);
     }
+
     public function getRelatedAssignments(): ActiveQuery
     {
         return $this->hasMany(RelatedAssignment::class, ['product_id' => 'id']);
     }
+
     public function getReviews(): ActiveQuery
     {
         return $this->hasMany(Review::class, ['product_id' => 'id']);
     }
+
     ##########################
+
     public static function tableName(): string
     {
         return '{{%shop_products}}';
     }
+
     public function behaviors(): array
     {
         return [
@@ -388,12 +447,14 @@ class Product extends ActiveRecord
             ],
         ];
     }
+
     public function transactions()
     {
         return [
             self::SCENARIO_DEFAULT => self::OP_ALL,
         ];
     }
+
     public function afterSave($insert, $changedAttributes): void
     {
         $related = $this->getRelatedRecords();
