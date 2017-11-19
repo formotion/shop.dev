@@ -46,7 +46,7 @@ class UserRepository
     private function getBy(array $condition): User
     {
         if (!$user = User::find()->andWhere($condition)->limit(1)->one()) {
-            throw new NotFoundException('User not found.');
+            throw new NotFoundException('user not found.');
         }
         return $user;
     }

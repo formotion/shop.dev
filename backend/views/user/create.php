@@ -3,7 +3,7 @@
 /* @var $model shop\forms\manage\User\UserCreateForm */
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
-$this->title = 'Create User';
+$this->title = 'Create user';
 $this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

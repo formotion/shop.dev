@@ -8,7 +8,7 @@ use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 /**
- * User model
+ * user model
  *
  * @property integer $id
  * @property string $username
@@ -60,7 +60,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function confirmSignup(): void
     {
         if (!$this->isWait()) {
-            throw new \DomainException('User is already active.');
+            throw new \DomainException('user is already active.');
         }
         $this->status = self::STATUS_ACTIVE;
         $this->email_confirm_token = null;

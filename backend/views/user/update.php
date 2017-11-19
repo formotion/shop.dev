@@ -4,7 +4,7 @@
 /* @var $user shop\entities\User\User */
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
-$this->title = 'Update User: ' . $user->id;
+$this->title = 'Update user: ' . $user->id;
 $this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $user->id, 'url' => ['view', 'id' => $user->id]];
 $this->params['breadcrumbs'][] = 'Update';

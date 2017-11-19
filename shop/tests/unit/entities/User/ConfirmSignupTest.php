@@ -21,7 +21,7 @@ class ConfirmSignupTest extends Unit
             'status' => User::STATUS_ACTIVE,
             'email_confirm_token' => null,
         ]);
-        $this->expectExceptionMessage('User is already active.');
+        $this->expectExceptionMessage('user is already active.');
         $user->confirmSignup();
     }
 }
