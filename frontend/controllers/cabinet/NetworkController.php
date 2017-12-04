@@ -1,5 +1,7 @@
 <?php
+
 namespace frontend\controllers\cabinet;
+
 use shop\services\auth\NetworkService;
 use Yii;
 use yii\authclient\ClientInterface;
@@ -7,14 +9,19 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\authclient\AuthAction;
+
 class NetworkController extends Controller
 {
+    public $layout = 'cabinet';
+
     private $service;
+
     public function __construct($id, $module, NetworkService $service, $config = [])
     {
         parent::__construct($id, $module, $config);
         $this->service = $service;
     }
+
     public function actions()
     {
         return [
@@ -25,11 +32,13 @@ class NetworkController extends Controller
             ],
         ];
     }
+
     public function onAuthSuccess(ClientInterface $client): void
     {
         $network = $client->getId();
         $attributes = $client->getUserAttributes();
         $identity = ArrayHelper::getValue($attributes, 'id');
+
         try {
             $this->service->attach(Yii::$app->user->id, $network, $identity);
             Yii::$app->session->setFlash('success', 'Network is successfully attached.');

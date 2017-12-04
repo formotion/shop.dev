@@ -1,5 +1,7 @@
 <?php
+
 namespace backend\controllers\shop;
+
 use shop\forms\manage\Shop\TagForm;
 use shop\services\manage\Shop\TagManageService;
 use Yii;
@@ -8,14 +10,17 @@ use backend\forms\Shop\TagSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+
 class TagController extends Controller
 {
     private $service;
+
     public function __construct($id, $module, TagManageService $service, $config = [])
     {
         parent::__construct($id, $module, $config);
         $this->service = $service;
     }
+
     public function behaviors(): array
     {
         return [
@@ -27,6 +32,7 @@ class TagController extends Controller
             ],
         ];
     }
+
     /**
      * @return mixed
      */
@@ -34,11 +40,13 @@ class TagController extends Controller
     {
         $searchModel = new TagSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
+
     /**
      * @param integer $id
      * @return mixed
@@ -49,6 +57,7 @@ class TagController extends Controller
             'tag' => $this->findModel($id),
         ]);
     }
+
     /**
      * @return mixed
      */
@@ -68,6 +77,7 @@ class TagController extends Controller
             'model' => $form,
         ]);
     }
+
     /**
      * @param integer $id
      * @return mixed
@@ -75,6 +85,7 @@ class TagController extends Controller
     public function actionUpdate($id)
     {
         $tag = $this->findModel($id);
+
         $form = new TagForm($tag);
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
             try {
@@ -90,6 +101,7 @@ class TagController extends Controller
             'tag' => $tag,
         ]);
     }
+
     /**
      * @param integer $id
      * @return mixed
@@ -104,6 +116,7 @@ class TagController extends Controller
         }
         return $this->redirect(['index']);
     }
+
     /**
      * @param integer $id
      * @return Tag the loaded model

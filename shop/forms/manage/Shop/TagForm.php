@@ -1,13 +1,18 @@
 <?php
+
 namespace shop\forms\manage\Shop;
+
 use shop\entities\Shop\Tag;
 use shop\validators\SlugValidator;
 use yii\base\Model;
+
 class TagForm extends Model
 {
     public $name;
     public $slug;
+
     private $_tag;
+
     public function __construct(Tag $tag = null, $config = [])
     {
         if ($tag) {
@@ -17,6 +22,7 @@ class TagForm extends Model
         }
         parent::__construct($config);
     }
+
     public function rules(): array
     {
         return [

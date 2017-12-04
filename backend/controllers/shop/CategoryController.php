@@ -1,5 +1,7 @@
 <?php
+
 namespace backend\controllers\shop;
+
 use shop\forms\manage\Shop\CategoryForm;
 use shop\services\manage\Shop\CategoryManageService;
 use Yii;
@@ -8,14 +10,17 @@ use backend\forms\Shop\CategorySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+
 class CategoryController extends Controller
 {
     private $service;
+
     public function __construct($id, $module, CategoryManageService $service, $config = [])
     {
         parent::__construct($id, $module, $config);
         $this->service = $service;
     }
+
     public function behaviors(): array
     {
         return [
@@ -27,6 +32,7 @@ class CategoryController extends Controller
             ],
         ];
     }
+
     /**
      * @return mixed
      */
@@ -34,11 +40,13 @@ class CategoryController extends Controller
     {
         $searchModel = new CategorySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
+
     /**
      * @param integer $id
      * @return mixed
@@ -49,6 +57,7 @@ class CategoryController extends Controller
             'category' => $this->findModel($id),
         ]);
     }
+
     /**
      * @return mixed
      */
@@ -68,6 +77,7 @@ class CategoryController extends Controller
             'model' => $form,
         ]);
     }
+
     /**
      * @param integer $id
      * @return mixed
@@ -75,6 +85,7 @@ class CategoryController extends Controller
     public function actionUpdate($id)
     {
         $category = $this->findModel($id);
+
         $form = new CategoryForm($category);
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
             try {
@@ -90,6 +101,7 @@ class CategoryController extends Controller
             'category' => $category,
         ]);
     }
+
     /**
      * @param integer $id
      * @return mixed
@@ -104,6 +116,7 @@ class CategoryController extends Controller
         }
         return $this->redirect(['index']);
     }
+
     /**
      * @param integer $id
      * @return mixed
@@ -113,6 +126,7 @@ class CategoryController extends Controller
         $this->service->moveUp($id);
         return $this->redirect(['index']);
     }
+
     /**
      * @param integer $id
      * @return mixed
@@ -122,6 +136,7 @@ class CategoryController extends Controller
         $this->service->moveDown($id);
         return $this->redirect(['index']);
     }
+
     /**
      * @param integer $id
      * @return Category the loaded model

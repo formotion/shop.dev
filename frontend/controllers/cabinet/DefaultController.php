@@ -1,9 +1,14 @@
 <?php
+
 namespace frontend\controllers\cabinet;
+
 use yii\filters\AccessControl;
 use yii\web\Controller;
+
 class DefaultController extends Controller
 {
+    public $layout = 'cabinet';
+
     public function behaviors(): array
     {
         return [
@@ -18,6 +23,7 @@ class DefaultController extends Controller
             ],
         ];
     }
+
     /**
      * @return mixed
      */

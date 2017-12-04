@@ -7,7 +7,9 @@ use shop\entities\behaviors\MetaBehavior;
 use shop\entities\Meta;
 use shop\entities\Shop\Brand;
 use shop\entities\Shop\Category;
+use shop\entities\Shop\Product\queries\ProductQuery;
 use shop\entities\Shop\Tag;
+use shop\entities\User\WishlistItem;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Exception;
@@ -25,6 +27,7 @@ use yii\web\UploadedFile;
  * @property integer $price_new
  * @property integer $rating
  * @property integer $main_photo_id
+ * @property integer $status
  *
  * @property Meta $meta
  * @property Brand $brand
@@ -42,6 +45,9 @@ use yii\web\UploadedFile;
  */
 class Product extends ActiveRecord
 {
+    const STATUS_DRAFT = 0;
+    const STATUS_ACTIVE = 1;
+
     public $meta;
 
     public static function create($brandId, $categoryId, $code, $name, $description, Meta $meta): self
@@ -53,6 +59,7 @@ class Product extends ActiveRecord
         $product->name = $name;
         $product->description = $description;
         $product->meta = $meta;
+        $product->status = self::STATUS_DRAFT;
         $product->created_at = time();
         return $product;
     }
@@ -75,6 +82,38 @@ class Product extends ActiveRecord
     public function changeMainCategory($categoryId): void
     {
         $this->category_id = $categoryId;
+    }
+
+    public function activate(): void
+    {
+        if ($this->isActive()) {
+            throw new \DomainException('Product is already active.');
+        }
+        $this->status = self::STATUS_ACTIVE;
+    }
+
+    public function draft(): void
+    {
+        if ($this->isDraft()) {
+            throw new \DomainException('Product is already draft.');
+        }
+        $this->status = self::STATUS_DRAFT;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->status == self::STATUS_ACTIVE;
+    }
+
+
+    public function isDraft(): bool
+    {
+        return $this->status == self::STATUS_DRAFT;
+    }
+
+    public function getSeoTitle(): string
+    {
+        return $this->meta->title ?: $this->name;
     }
 
     public function setValue($id, $value): void
@@ -109,6 +148,16 @@ class Product extends ActiveRecord
         foreach ($this->modifications as $modification) {
             if ($modification->isIdEqualTo($id)) {
                 return $modification;
+            }
+        }
+        throw new \DomainException('Modification is not found.');
+    }
+
+    public function getModificationPrice($id): int
+    {
+        foreach ($this->modifications as $modification) {
+            if ($modification->isIdEqualTo($id)) {
+                return $modification->price ?: $this->price_new;
             }
         }
         throw new \DomainException('Modification is not found.');
@@ -450,6 +499,11 @@ class Product extends ActiveRecord
         return $this->hasMany(Review::class, ['product_id' => 'id']);
     }
 
+    public function getWishlistItems(): ActiveQuery
+    {
+        return $this->hasMany(WishlistItem::class, ['product_id' => 'id']);
+    }
+
     ##########################
 
     public static function tableName(): string
@@ -489,9 +543,14 @@ class Product extends ActiveRecord
     public function afterSave($insert, $changedAttributes): void
     {
         $related = $this->getRelatedRecords();
+        parent::afterSave($insert, $changedAttributes);
         if (array_key_exists('mainPhoto', $related)) {
             $this->updateAttributes(['main_photo_id' => $related['mainPhoto'] ? $related['mainPhoto']->id : null]);
         }
-        parent::afterSave($insert, $changedAttributes);
+    }
+
+    public static function find(): ProductQuery
+    {
+        return new ProductQuery(static::class);
     }
 }

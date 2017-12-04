@@ -1,8 +1,11 @@
 <?php
+
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+
 /* @var $this yii\web\View */
 /* @var $category shop\entities\Shop\Category */
+
 $this->title = $category->name;
 $this->params['breadcrumbs'][] = ['label' => 'Categories', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;

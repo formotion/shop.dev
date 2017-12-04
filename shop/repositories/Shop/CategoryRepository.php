@@ -1,7 +1,10 @@
 <?php
+
 namespace shop\repositories\Shop;
+
 use shop\entities\Shop\Category;
 use shop\repositories\NotFoundException;
+
 class CategoryRepository
 {
     public function get($id): Category
@@ -11,12 +14,14 @@ class CategoryRepository
         }
         return $category;
     }
+
     public function save(Category $category): void
     {
         if (!$category->save()) {
             throw new \RuntimeException('Saving error.');
         }
     }
+
     public function remove(Category $category): void
     {
         if (!$category->delete()) {

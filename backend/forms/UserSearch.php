@@ -1,8 +1,11 @@
 <?php
+
 namespace backend\forms;
+
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use shop\entities\User\User;
+
 class UserSearch extends Model
 {
     public $id;

@@ -112,25 +112,25 @@ class ProductManageService
 
         $product->changeMainCategory($category->id);
 
-        $product->revokeCategories();
-
-        foreach ($form->categories->others as $otherId) {
-            $category = $this->categories->get($otherId);
-            $product->assignCategory($category->id);
-        }
-
-        foreach ($form->values as $value) {
-            $product->setValue($value->id, $value->value);
-        }
-
-        $product->revokeTags();
-
-        foreach ($form->tags->existing as $tagId) {
-            $tag = $this->tags->get($tagId);
-            $product->assignTag($tag->id);
-        }
-
         $this->transaction->wrap(function () use ($product, $form) {
+
+            $product->revokeCategories();
+            $product->revokeTags();
+            $this->products->save($product);
+
+            foreach ($form->categories->others as $otherId) {
+                $category = $this->categories->get($otherId);
+                $product->assignCategory($category->id);
+            }
+
+            foreach ($form->values as $value) {
+                $product->setValue($value->id, $value->value);
+            }
+
+            foreach ($form->tags->existing as $tagId) {
+                $tag = $this->tags->get($tagId);
+                $product->assignTag($tag->id);
+            }
             foreach ($form->tags->newNames as $tagName) {
                 if (!$tag = $this->tags->findByName($tagName)) {
                     $tag = Tag::create($tagName, $tagName);
@@ -146,6 +146,20 @@ class ProductManageService
     {
         $product = $this->products->get($id);
         $product->setPrice($form->new, $form->old);
+        $this->products->save($product);
+    }
+
+    public function activate($id): void
+    {
+        $product = $this->products->get($id);
+        $product->activate();
+        $this->products->save($product);
+    }
+
+    public function draft($id): void
+    {
+        $product = $this->products->get($id);
+        $product->draft();
         $this->products->save($product);
     }
 

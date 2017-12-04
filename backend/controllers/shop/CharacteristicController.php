@@ -1,5 +1,7 @@
 <?php
+
 namespace backend\controllers\shop;
+
 use shop\forms\manage\Shop\CharacteristicForm;
 use shop\services\manage\Shop\CharacteristicManageService;
 use Yii;
@@ -8,14 +10,17 @@ use backend\forms\Shop\CharacteristicSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+
 class CharacteristicController extends Controller
 {
     private $service;
+
     public function __construct($id, $module, CharacteristicManageService $service, $config = [])
     {
         parent::__construct($id, $module, $config);
         $this->service = $service;
     }
+
     public function behaviors(): array
     {
         return [
@@ -27,6 +32,7 @@ class CharacteristicController extends Controller
             ],
         ];
     }
+
     /**
      * @return mixed
      */
@@ -34,11 +40,13 @@ class CharacteristicController extends Controller
     {
         $searchModel = new CharacteristicSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
+
     /**
      * @param integer $id
      * @return mixed
@@ -49,6 +57,7 @@ class CharacteristicController extends Controller
             'characteristic' => $this->findModel($id),
         ]);
     }
+
     /**
      * @return mixed
      */
@@ -68,6 +77,7 @@ class CharacteristicController extends Controller
             'model' => $form,
         ]);
     }
+
     /**
      * @param integer $id
      * @return mixed
@@ -75,6 +85,7 @@ class CharacteristicController extends Controller
     public function actionUpdate($id)
     {
         $characteristic = $this->findModel($id);
+
         $form = new CharacteristicForm($characteristic);
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
             try {
@@ -90,6 +101,7 @@ class CharacteristicController extends Controller
             'characteristic' => $characteristic,
         ]);
     }
+
     /**
      * @param integer $id
      * @return mixed
@@ -104,6 +116,7 @@ class CharacteristicController extends Controller
         }
         return $this->redirect(['index']);
     }
+
     /**
      * @param integer $id
      * @return Characteristic the loaded model

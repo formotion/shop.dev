@@ -1,6 +1,8 @@
 <?php
 namespace frontend\controllers;
+
 use yii\web\Controller;
+
 /**
  * Site controller
  */
@@ -21,13 +23,16 @@ class SiteController extends Controller
             ],
         ];
     }
+
     /**
      * @return mixed
      */
     public function actionIndex()
     {
+        $this->layout = 'home';
         return $this->render('index');
     }
+
     /**
      * @return mixed
      */

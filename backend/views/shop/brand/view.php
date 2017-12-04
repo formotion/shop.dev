@@ -1,8 +1,11 @@
 <?php
+
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+
 /* @var $this yii\web\View */
 /* @var $brand shop\entities\Shop\Brand */
+
 $this->title = $brand->name;
 $this->params['breadcrumbs'][] = ['label' => 'Brands', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;

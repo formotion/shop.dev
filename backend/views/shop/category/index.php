@@ -1,11 +1,14 @@
 <?php
+
 use shop\entities\Shop\Category;
 use yii\grid\ActionColumn;
 use yii\helpers\Html;
 use yii\grid\GridView;
+
 /* @var $this yii\web\View */
 /* @var $searchModel backend\forms\Shop\CategorySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+
 $this->title = 'Categories';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -46,4 +49,3 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
-© 2017 GitHub, Inc.

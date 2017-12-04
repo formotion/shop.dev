@@ -1,7 +1,10 @@
 <?php
+
 namespace shop\tests\unit\entities\User;
+
 use Codeception\Test\Unit;
 use shop\entities\User\User;
+
 class RequestSignupTest extends Unit
 {
     public function testSuccess()
@@ -11,6 +14,7 @@ class RequestSignupTest extends Unit
             $email = 'email@site.com',
             $password = 'password'
         );
+
         $this->assertEquals($username, $user->username);
         $this->assertEquals($email, $user->email);
         $this->assertNotEmpty($user->password_hash);

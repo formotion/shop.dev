@@ -1,5 +1,7 @@
 <?php
+
 namespace shop\services;
+
 class TransactionManager
 {
     public function wrap(callable $function): void

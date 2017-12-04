@@ -8,4 +8,4 @@ class PriceHelper
     {
         return number_format($price, 0, '.', ' ');
     }
-}
+} 
